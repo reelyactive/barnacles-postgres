@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const BarnaclesPostgres = require('../lib/barnaclespostgres.js');
+
+
+let barnaclesPostgres = new BarnaclesPostgres({ printErrors: true });
+
+
+console.log('barnacles-postgres instantiation test');
