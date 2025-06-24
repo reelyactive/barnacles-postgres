@@ -1,7 +1,13 @@
 barnacles-postgres
 ==================
 
-Write ambient IoT data from Pareto Anywhere open source middleware to a PostgreSQL database.
+__barnacles-postgres__ writes ambient IoT data to a PostgreSQL database.
+
+![Overview of barnacles-postgres](https://reelyactive.github.io/barnacles-postgres/images/overview.png)
+
+__barnacles-postgres__ ingests a real-time stream of _raddec_ & _dynamb_ objects from [barnacles](https://github.com/reelyactive/barnacles/), and _spatem_ objects from [chimps](https://github.com/reelyactive/chimps/), which it writes to a given PostgreSQL database.  It couples seamlessly with reelyActive's [Pareto Anywhere](https://www.reelyactive.com/pareto/anywhere/) open source IoT middleware.
+
+__barnacles-postgres__ is a lightweight [Node.js package](https://www.npmjs.com/package/barnacles-postgres) that can run on resource-constrained edge devices as well as on powerful cloud servers and anything in between.
 
 
 Options
