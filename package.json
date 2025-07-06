@@ -17,7 +17,8 @@
   },
   "main": "./lib/barnaclespostgres.js",
   "scripts": {
-    "start": "node bin/barnacles-postgres"
+    "start": "node bin/barnacles-postgres",
+    "create-tables": "node bin/barnacles-postgres-create-tables"
   },
   "repository": {
     "type": "git",

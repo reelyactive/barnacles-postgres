@@ -37,7 +37,25 @@ PostgreSQL Installation
 sudo apt install postgresql
 sudo systemctl start postgresql.service
 sudo -u postgres createuser --login --pwprompt reelyactive
-sudo -u postgres createdb pareto_anywhere
+sudo -u postgres createdb -O reelyactive pareto_anywhere
+```
+
+
+Creating Tables
+---------------
+
+Data is stored in three tables: raddec, dynamb and spatem.  These tables must be explicitly created after the database is created.  On Linux systems, run the following script to create these tables:
+
+    npm run create-tables
+
+Alternatively, each table can be manually created with the following SQL commands:
+
+```sql
+CREATE TABLE raddec (_storeId bigint GENERATED ALWAYS AS IDENTITY, raddec JSONB NOT NULL);
+
+CREATE TABLE dynamb (_storeId bigint GENERATED ALWAYS AS IDENTITY, dynamb JSONB NOT NULL);
+
+CREATE TABLE spatem (_storeId bigint GENERATED ALWAYS AS IDENTITY, spatem JSONB NOT NULL);
 ```
 
 
