@@ -85,13 +85,13 @@ Alternatively, each index can be manually created with the following SQL command
 
 ```sql
 CREATE INDEX raddec_transmitter_idx ON raddec (transmitterid);
-CREATE INDEX raddec_timestamp_idx ON raddec (timestamp);
+CREATE INDEX raddec_timestamp_idx ON raddec USING BRIN(timestamp);
 
 CREATE INDEX dynamb_device_idx ON dynamb (deviceid);
-CREATE INDEX dynamb_timestamp_idx ON dynamb (timestamp);
+CREATE INDEX dynamb_timestamp_idx ON dynamb USING BRIN(timestamp);
 
 CREATE INDEX spatem_device_idx ON spatem (deviceid);
-CREATE INDEX spatem_timestamp_idx ON spatem (timestamp);
+CREATE INDEX spatem_timestamp_idx ON spatem USING BRIN(timestamp);
 ```
 
 

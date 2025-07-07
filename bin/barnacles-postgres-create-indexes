@@ -6,11 +6,11 @@ const exec = require('child_process').exec;
 // User = reelyactive, Database = pareto_anywhere, Host = 127.0.0.1
 const LINUX_CMD = "psql -U reelyactive -h 127.0.0.1 -d pareto_anywhere -c ";
 const INDEX_RADDEC_TRANSMITTER = "'CREATE INDEX raddec_transmitter_idx ON raddec (transmitterid);'";
-const INDEX_RADDEC_TIMESTAMP = "'CREATE INDEX raddec_timestamp_idx ON raddec (timestamp);'";
+const INDEX_RADDEC_TIMESTAMP = "'CREATE INDEX raddec_timestamp_idx ON raddec USING BRIN(timestamp);'";
 const INDEX_DYNAMB_DEVICE = "'CREATE INDEX dynamb_device_idx ON dynamb (deviceid);'";
-const INDEX_DYNAMB_TIMESTAMP = "'CREATE INDEX dynamb_timestamp_idx ON dynamb (timestamp);'";
+const INDEX_DYNAMB_TIMESTAMP = "'CREATE INDEX dynamb_timestamp_idx ON dynamb USING BRIN(timestamp);'";
 const INDEX_SPATEM_DEVICE = "'CREATE INDEX spatem_device_idx ON spatem (deviceid);'";
-const INDEX_SPATEM_TIMESTAMP = "'CREATE INDEX spatem_timestamp_idx ON spatem (timestamp);'";
+const INDEX_SPATEM_TIMESTAMP = "'CREATE INDEX spatem_timestamp_idx ON spatem USING BRIN(timestamp);'";
 
 
 // Linux
@@ -32,7 +32,7 @@ if(os.platform() === 'linux') {
                 if(err) { return console.log(err.message); }
                 else {
                   console.log('Indexed dynamb timestamp');
-                 exec(LINUX_CMD + INDEX_SPATEM_DEVICE, (err) => {
+                  exec(LINUX_CMD + INDEX_SPATEM_DEVICE, (err) => {
                     if(err) { return console.log(err.message); }
                     else {
                       console.log('Indexed spatem deviceId');
