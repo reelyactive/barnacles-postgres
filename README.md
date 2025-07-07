@@ -51,11 +51,47 @@ Data is stored in three tables: raddec, dynamb and spatem.  These tables must be
 Alternatively, each table can be manually created with the following SQL commands:
 
 ```sql
-CREATE TABLE raddec (_storeId bigint GENERATED ALWAYS AS IDENTITY, raddec JSONB NOT NULL);
+CREATE TABLE raddec (
+    _storeid bigint GENERATED ALWAYS AS IDENTITY,
+    transmitterid varchar(32) NOT NULL,
+    timestamp timestamp DEFAULT current_timestamp,
+    raddec JSONB NOT NULL
+);
 
-CREATE TABLE dynamb (_storeId bigint GENERATED ALWAYS AS IDENTITY, dynamb JSONB NOT NULL);
+CREATE TABLE dynamb (
+    _storeId bigint GENERATED ALWAYS AS IDENTITY,
+    deviceid varchar(32) NOT NULL,
+    timestamp timestamp DEFAULT current_timestamp,
+    dynamb JSONB NOT NULL
+);
 
-CREATE TABLE spatem (_storeId bigint GENERATED ALWAYS AS IDENTITY, spatem JSONB NOT NULL);
+CREATE TABLE spatem (
+    _storeId bigint GENERATED ALWAYS AS IDENTITY,
+    deviceid varchar(32) NOT NULL,
+    timestamp timestamp DEFAULT current_timestamp,
+    spatem JSONB NOT NULL
+);
+```
+
+
+Creating Indexes
+----------------
+
+To facilitate efficient queries at scale, the transmitterid/deviceid and timestamp columns may be indexed.  On Linux systems, run the following script to create these indexes:
+
+    npm run create-indexes
+
+Alternatively, each index can be manually created with the following SQL commands:
+
+```sql
+CREATE INDEX raddec_transmitter_idx ON raddec (transmitterid);
+CREATE INDEX raddec_timestamp_idx ON raddec (timestamp);
+
+CREATE INDEX dynamb_device_idx ON dynamb (deviceid);
+CREATE INDEX dynamb_timestamp_idx ON dynamb (timestamp);
+
+CREATE INDEX spatem_device_idx ON spatem (deviceid);
+CREATE INDEX spatem_timestamp_idx ON spatem (timestamp);
 ```
 
 
