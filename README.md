@@ -23,6 +23,7 @@ __barnacles-postgres__ supports the following options:
 | port          | 5432                       | PGPORT                         |
 | database      | "pareto_anywhere"          | PGDATABASE                     |
 | eventsToStore | { raddec: {}, dynamb: {}, spatem: {} } | n/a                |
+| pool          | null                       | n/a                            |
 | printErrors   | false                      | n/a                            |
 
 Environment variables, when used, take precedence over the default values.
