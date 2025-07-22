@@ -26,7 +26,10 @@
     "url": "https://github.com/reelyactive/barnacles-postgres.git"
   },
   "dependencies": {
-    "pg": "^8.16.2"
+    "dynamb-filter": "^1.0.1",
+    "pg": "^8.16.2",
+    "raddec-filter": "^1.0.1",
+    "spatem-filter": "^1.0.1"
   },
   "devDependencies": {},
   "bugs": {

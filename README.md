@@ -22,8 +22,22 @@ __barnacles-postgres__ supports the following options:
 | host          | "localhost"                | PGHOST                         |
 | port          | 5432                       | PGPORT                         |
 | database      | "pareto_anywhere"          | PGDATABASE                     |
+| eventsToStore | { raddec: {}, dynamb: {}, spatem: {} } | n/a                |
+| printErrors   | false                      | n/a                            |
 
 Environment variables, when used, take precedence over the default values.
+
+### eventsToStore
+
+The eventsToStore option determines which events are to be stored in the database, and any event-specific options such as filters.  For instance, to store only _dynamb_ objects with a given _deviceId_:
+
+    {
+      dynamb: {
+        filterParameters: { acceptedDeviceIds: [ 'bada55beac04' ] }
+      }
+    }
+
+Each event supports _filterParameters_.  Consult the [raddec-filter](https://github.com/reelyactive/raddec-filter/), [dynamb-filter](https://github.com/reelyactive/dynamb-filter/) and [spatem-filter](https://github.com/reelyactive/spatem-filter/) documentation for their respective parameters.
 
 
 PostgreSQL Installation
