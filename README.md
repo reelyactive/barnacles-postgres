@@ -29,7 +29,7 @@ Environment variables, when used, take precedence over the default values.
 
 ### eventsToStore
 
-The eventsToStore option determines which events are to be stored in the database, and any event-specific options such as filters.  For instance, to store only _dynamb_ objects with a given _deviceId_:
+The _eventsToStore_ option determines which events (_raddec_, _dynamb_ and/or _spatem_) are to be stored in the database, and any event-specific options such as filter parameters.  For instance, to store only _dynamb_ objects with a given _deviceId_:
 
     {
       dynamb: {
