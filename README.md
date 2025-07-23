@@ -68,21 +68,21 @@ Alternatively, each table can be manually created with the following SQL command
 ```sql
 CREATE TABLE raddec (
     _storeid bigint GENERATED ALWAYS AS IDENTITY,
-    transmitterid varchar(32) NOT NULL,
+    transmittersignature varchar(36) NOT NULL,
     timestamp timestamp DEFAULT current_timestamp,
     raddec JSONB NOT NULL
 );
 
 CREATE TABLE dynamb (
     _storeId bigint GENERATED ALWAYS AS IDENTITY,
-    deviceid varchar(32) NOT NULL,
+    devicesignature varchar(36) NOT NULL,
     timestamp timestamp DEFAULT current_timestamp,
     dynamb JSONB NOT NULL
 );
 
 CREATE TABLE spatem (
     _storeId bigint GENERATED ALWAYS AS IDENTITY,
-    deviceid varchar(32) NOT NULL,
+    devicesignature varchar(36) NOT NULL,
     timestamp timestamp DEFAULT current_timestamp,
     spatem JSONB NOT NULL
 );
@@ -99,13 +99,13 @@ To facilitate efficient queries at scale, the transmitterid/deviceid and timesta
 Alternatively, each index can be manually created with the following SQL commands:
 
 ```sql
-CREATE INDEX raddec_transmitter_idx ON raddec (transmitterid);
+CREATE INDEX raddec_transmitter_idx ON raddec (transmittersignature);
 CREATE INDEX raddec_timestamp_idx ON raddec USING BRIN(timestamp);
 
-CREATE INDEX dynamb_device_idx ON dynamb (deviceid);
+CREATE INDEX dynamb_device_idx ON dynamb (devicesignature);
 CREATE INDEX dynamb_timestamp_idx ON dynamb USING BRIN(timestamp);
 
-CREATE INDEX spatem_device_idx ON spatem (deviceid);
+CREATE INDEX spatem_device_idx ON spatem (devicesignature);
 CREATE INDEX spatem_timestamp_idx ON spatem USING BRIN(timestamp);
 ```
 

@@ -5,11 +5,11 @@ const exec = require('child_process').exec;
 
 // User = reelyactive, Database = pareto_anywhere, Host = 127.0.0.1
 const LINUX_CMD = "psql -U reelyactive -h 127.0.0.1 -d pareto_anywhere -c ";
-const INDEX_RADDEC_TRANSMITTER = "'CREATE INDEX raddec_transmitter_idx ON raddec (transmitterid);'";
+const INDEX_RADDEC_TRANSMITTER = "'CREATE INDEX raddec_transmitter_idx ON raddec (transmittersignature);'";
 const INDEX_RADDEC_TIMESTAMP = "'CREATE INDEX raddec_timestamp_idx ON raddec USING BRIN(timestamp);'";
-const INDEX_DYNAMB_DEVICE = "'CREATE INDEX dynamb_device_idx ON dynamb (deviceid);'";
+const INDEX_DYNAMB_DEVICE = "'CREATE INDEX dynamb_device_idx ON dynamb (devicesignature);'";
 const INDEX_DYNAMB_TIMESTAMP = "'CREATE INDEX dynamb_timestamp_idx ON dynamb USING BRIN(timestamp);'";
-const INDEX_SPATEM_DEVICE = "'CREATE INDEX spatem_device_idx ON spatem (deviceid);'";
+const INDEX_SPATEM_DEVICE = "'CREATE INDEX spatem_device_idx ON spatem (devicesignature);'";
 const INDEX_SPATEM_TIMESTAMP = "'CREATE INDEX spatem_timestamp_idx ON spatem USING BRIN(timestamp);'";
 
 
@@ -19,7 +19,7 @@ if(os.platform() === 'linux') {
   exec(LINUX_CMD + INDEX_RADDEC_TRANSMITTER, (err) => {
     if(err) { return console.log(err.message); }
     else {
-      console.log('Indexed raddec transmitterId');
+      console.log('Indexed raddec transmitterSignature');
       exec(LINUX_CMD + INDEX_RADDEC_TIMESTAMP, (err) => {
         if(err) { return console.log(err.message); }
         else {
@@ -27,7 +27,7 @@ if(os.platform() === 'linux') {
           exec(LINUX_CMD + INDEX_DYNAMB_DEVICE, (err) => {
             if(err) { return console.log(err.message); }
             else {
-              console.log('Indexed dynamb deviceId');
+              console.log('Indexed dynamb deviceSignature');
               exec(LINUX_CMD + INDEX_DYNAMB_TIMESTAMP, (err) => {
                 if(err) { return console.log(err.message); }
                 else {
@@ -35,7 +35,7 @@ if(os.platform() === 'linux') {
                   exec(LINUX_CMD + INDEX_SPATEM_DEVICE, (err) => {
                     if(err) { return console.log(err.message); }
                     else {
-                      console.log('Indexed spatem deviceId');
+                      console.log('Indexed spatem deviceSignature');
                       exec(LINUX_CMD + INDEX_SPATEM_TIMESTAMP, (err) => {
                         if(err) { return console.log(err.message); }
                         else {
