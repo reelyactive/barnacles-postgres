@@ -74,7 +74,7 @@ Each event supports _filterParameters_.  Consult the [raddec-filter](https://git
 PostgreSQL Installation
 -----------------------
 
-[Download PostgreSQL](https://www.postgresql.org/download/) or follow the OS-specific instructions below.
+[Download PostgreSQL](https://www.postgresql.org/download/) or follow the OS-specific instructions below.  __barnacles-postgres__ will automatically connect to a locally-installed PostgreSQL database which observes the default options above.
 
 ### Ubuntu / Raspberry Pi OS (64-bit)
 
