@@ -10,6 +10,36 @@ __barnacles-postgres__ ingests a real-time stream of _raddec_ & _dynamb_ objects
 __barnacles-postgres__ is a lightweight [Node.js package](https://www.npmjs.com/package/barnacles-postgres) that can run on resource-constrained edge devices as well as on powerful cloud servers and anything in between.
 
 
+Pareto Anywhere integration
+---------------------------
+
+A common application of __barnacles-postgres__ is to write IoT data from [pareto-anywhere](https://github.com/reelyactive/pareto-anywhere) to a PostgreSQL database.  Simply follow our [Create a Pareto Anywhere startup script](https://reelyactive.github.io/diy/pareto-anywhere-startup-script/) tutorial using the script below:
+
+```javascript
+#!/usr/bin/env node
+
+const ParetoAnywhere = require('../lib/paretoanywhere.js');
+
+// Edit the options to specify the PostgreSQL instance
+const BARNACLES_POSTGRES_OPTIONS = {};
+
+// ----- Exit gracefully if the optional dependency is not found -----
+let BarnaclesPostgres;
+try {
+  BarnaclesPostgres = require('barnacles-postgres');
+}
+catch(err) {
+  console.log('This script requires barnacles-postgres.  Install with:');
+  console.log('\r\n    "npm install barnacles-postgres"\r\n');
+  return console.log('and then run this script again.');
+}
+// -------------------------------------------------------------------
+
+let pa = new ParetoAnywhere();
+pa.barnacles.addInterface(BarnaclesPostgres, BARNACLES_POSTGRES_OPTIONS);
+```
+
+
 Options
 -------
 
