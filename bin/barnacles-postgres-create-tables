@@ -5,9 +5,9 @@ const exec = require('child_process').exec;
 
 // User = reelyactive, Database = pareto_anywhere, Host = 127.0.0.1
 const LINUX_CMD = "psql -U reelyactive -h 127.0.0.1 -d pareto_anywhere -c ";
-const CREATE_RADDEC = "'CREATE TABLE raddec (_storeid bigint GENERATED ALWAYS AS IDENTITY, transmittersignature varchar(36) NOT NULL, timestamp timestamp DEFAULT current_timestamp, raddec JSONB NOT NULL);'";
-const CREATE_DYNAMB = "'CREATE TABLE dynamb (_storeid bigint GENERATED ALWAYS AS IDENTITY, devicesignature varchar(36) NOT NULL, timestamp timestamp DEFAULT current_timestamp, dynamb JSONB NOT NULL);'";
-const CREATE_SPATEM = "'CREATE TABLE spatem (_storeid bigint GENERATED ALWAYS AS IDENTITY, devicesignature varchar(36) NOT NULL, timestamp timestamp DEFAULT current_timestamp, spatem JSONB NOT NULL);'";
+const CREATE_RADDEC = "'CREATE TABLE raddec (_storeid bigint GENERATED ALWAYS AS IDENTITY, transmittersignature varchar(36) NOT NULL, timestamp timestamptz DEFAULT current_timestamp, raddec JSONB NOT NULL);'";
+const CREATE_DYNAMB = "'CREATE TABLE dynamb (_storeid bigint GENERATED ALWAYS AS IDENTITY, devicesignature varchar(36) NOT NULL, timestamp timestamptz DEFAULT current_timestamp, dynamb JSONB NOT NULL);'";
+const CREATE_SPATEM = "'CREATE TABLE spatem (_storeid bigint GENERATED ALWAYS AS IDENTITY, devicesignature varchar(36) NOT NULL, timestamp timestamptz DEFAULT current_timestamp, spatem JSONB NOT NULL);'";
 
 // Linux
 if(os.platform() === 'linux') {

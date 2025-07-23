@@ -99,21 +99,21 @@ Alternatively, each table can be manually created with the following SQL command
 CREATE TABLE raddec (
     _storeid bigint GENERATED ALWAYS AS IDENTITY,
     transmittersignature varchar(36) NOT NULL,
-    timestamp timestamp DEFAULT current_timestamp,
+    timestamp timestamptz DEFAULT current_timestamp,
     raddec JSONB NOT NULL
 );
 
 CREATE TABLE dynamb (
     _storeId bigint GENERATED ALWAYS AS IDENTITY,
     devicesignature varchar(36) NOT NULL,
-    timestamp timestamp DEFAULT current_timestamp,
+    timestamp timestamptz DEFAULT current_timestamp,
     dynamb JSONB NOT NULL
 );
 
 CREATE TABLE spatem (
     _storeId bigint GENERATED ALWAYS AS IDENTITY,
     devicesignature varchar(36) NOT NULL,
-    timestamp timestamp DEFAULT current_timestamp,
+    timestamp timestamptz DEFAULT current_timestamp,
     spatem JSONB NOT NULL
 );
 ```
