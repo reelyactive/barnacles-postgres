@@ -140,6 +140,20 @@ CREATE INDEX spatem_timestamp_idx ON spatem USING BRIN(timestamp);
 ```
 
 
+Useful Command-Line PostgreSQL Queries
+--------------------------------------
+
+Count the number of rows (entries) in the _raddec_ table:
+
+    psql -h localhost -U reelyactive -d pareto_anywhere -c "\timing on" -c "SELECT count(*) FROM raddec;"
+
+Delete (:heavy_exclamation_mark:) the _raddec_ table and all its entries:
+
+    psql -h localhost -U reelyactive -d pareto_anywhere -c "DROP TABLE raddec;"
+
+Should the above command be used (with caution!), the deleted database table(s) will need to be created anew (see [Creating Tables](#creating-tables) above).
+
+
 Importing data from CSV files
 -----------------------------
 
