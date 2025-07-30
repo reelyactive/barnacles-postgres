@@ -1,0 +1,139 @@
+#!/usr/bin/env node
+
+const BarnaclesPostgres = require('../lib/barnaclespostgres.js');
+const fs = require('fs');
+const path = require('path');
+const Raddec = require('raddec');
+const readline = require('readline');
+
+const SEPARATOR = ',';
+const DEFAULT_CSV_FILE_PATH = 'raddec.csv'; 
+
+
+// ----- Exit gracefully if the source file isn't found -----
+let csvFilePath = (process.argv.length > 2) ? process.argv[2] :
+                                            DEFAULT_CSV_FILE_PATH; 
+try {
+  fs.accessSync(path.resolve(csvFilePath), fs.constants.R_OK);
+}
+catch(error) {
+  console.log('The source file', csvFilePath, 'could not be found.');
+  return console.log('Specify a valid source file path as an argument.');
+}
+// ----------------------------------------------------------
+
+
+let barnacles = new BarnaclesPostgres({ printErrors: true });
+let fileReader = readline.createInterface({
+  input: fs.createReadStream(path.resolve(csvFilePath))
+});
+let isReadComplete = false;
+let currentLine = 0;
+let writeCount = 0;
+let propertyIndexes = {};
+
+
+// Read the file line-by-line until close
+fileReader.on('line', processRow);
+fileReader.on('close', () => { isReadComplete = true });
+
+
+// Process a line of the file as a CSV row
+function processRow(line) {
+  if(currentLine++ === 0) {
+    let columnHeaders = line.split(',');
+    propertyIndexes = createPropertyIndexes(columnHeaders);
+    if(!propertyIndexes) {
+      return console.log('Invalid column headers:', columnHeaders);
+    }
+  }
+  else {
+    let rowData = toDataArray(line);
+    let raddec = createRaddec(propertyIndexes, rowData);
+    if(raddec) {
+      barnacles.handleEvent('raddec', raddec);
+    }
+  }
+}
+
+
+// Establish the index of each raddec property from the column headers
+function createPropertyIndexes(columnHeaders) {
+  if(!columnHeaders.includes('transmitterId') ||
+     !columnHeaders.includes('receiverId') ||
+     !columnHeaders.includes('timestamp') ||
+     !columnHeaders.includes('rssi')) {
+    return null;
+  }
+
+  let indexes = {};
+
+  columnHeaders.forEach((column, index) => {
+    indexes[column] = index;
+  });
+
+  return indexes;
+}
+
+
+// Split the given line based on the CSV separator,
+// handling the case where strings include the separator
+function toDataArray(line) {
+  let columns = line.split(SEPARATOR);
+
+  columns.forEach((column, index) => {
+    let isSplitString = (countOccurrences(column, '"') % 2 === 1);
+    if(isSplitString) {
+      let mergedColumn = column + SEPARATOR + columns[index + 1];
+      columns.splice(index, 2, mergedColumn);
+    }
+  });
+
+  return columns;
+}
+
+
+// Count the occurences of the given character in the given string
+function countOccurrences(string, character) {
+  return [...string].filter((item) => item === character).length;
+}
+
+
+// Create the raddec from the given columns of data
+function createRaddec(propertyIndexes, rowData) {
+  if(Object.keys(propertyIndexes).length !== rowData.length) {
+    return null;
+  }
+
+  let transmitterId = rowData[propertyIndexes.transmitterId];
+  let receiverId = rowData[propertyIndexes.receiverId];
+  let timestamp = new Date(rowData[propertyIndexes.timestamp]).getTime();
+  let rssi = Number(rowData[propertyIndexes.rssi].replaceAll('"', ''));
+
+  let transmitterIdType = propertyIndexes.hasOwnProperty('transmitterIdType') ?
+       Number(rowData[propertyIndexes.transmitterIdType].replaceAll('"', '')) :
+                                               Raddec.identifiers.TYPE_UNKNOWN;
+  let receiverIdType = propertyIndexes.hasOwnProperty('transmitterIdType') ?
+       Number(rowData[propertyIndexes.receiverIdType].replaceAll('"', '')) :
+                                            Raddec.identifiers.TYPE_UNKNOWN;
+
+
+  let raddec = new Raddec({ transmitterId: transmitterId,
+                            transmitterIdType: transmitterIdType,
+                            timestamp: timestamp });
+  raddec.addDecoding({ receiverId: receiverId,
+                       receiverIdType: receiverIdType,
+                       rssi: rssi });
+  return raddec;
+}
+
+
+barnacles.on('raddec', (raddec) => {
+  writeCount++;
+  if(isReadComplete && (writeCount === currentLine - 1)) {
+    console.log('Done.', writeCount, 'raddecs written.');
+  }
+  else if(writeCount % 100 === 0) {
+    console.log(writeCount, 'raddecs written');
+  }
+});

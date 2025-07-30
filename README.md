@@ -140,6 +140,16 @@ CREATE INDEX spatem_timestamp_idx ON spatem USING BRIN(timestamp);
 ```
 
 
+Importing data from CSV files
+-----------------------------
+
+To import _raddec_ data from a CSV file into a local PostgreSQL database, run the following script:
+
+    npm run import-raddec-csv filename.csv
+
+Change `filename.csv` to the name/path of the source file.
+
+
 Contributing
 ------------
 

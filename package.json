@@ -19,7 +19,8 @@
   "scripts": {
     "start": "node bin/barnacles-postgres",
     "create-tables": "node bin/barnacles-postgres-create-tables",
-    "create-indexes": "node bin/barnacles-postgres-create-indexes"
+    "create-indexes": "node bin/barnacles-postgres-create-indexes",
+    "import-raddec-csv": "node bin/barnacles-postgres-raddec-csv"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "dependencies": {
     "dynamb-filter": "^1.0.1",
     "pg": "^8.16.2",
+    "raddec": ">=0.6.1",
     "raddec-filter": "^1.0.1",
     "spatem-filter": "^1.0.1"
   },
