@@ -147,7 +147,7 @@ Count the number of rows (entries) in the _raddec_ table:
 
     psql -h localhost -U reelyactive -d pareto_anywhere -c "\timing on" -c "SELECT count(*) FROM raddec;"
 
-Delete (:heavy_exclamation_mark:) the _raddec_ table and all its entries:
+Delete ( :heavy_exclamation_mark: ) the _raddec_ table and all its entries:
 
     psql -h localhost -U reelyactive -d pareto_anywhere -c "DROP TABLE raddec;"
 
@@ -161,7 +161,13 @@ To import _raddec_ data from a CSV file into a local PostgreSQL database, run th
 
     npm run import-raddec-csv filename.csv
 
-Change `filename.csv` to the name/path of the source file.
+Change `filename.csv` to the name/path of the source file.  The CSV file must use the comma as a separator and the first row must specify the property names, which include the following:
+- transmitterId
+- transmitterIdType (optional)
+- receiverId
+- receiverIdType (optional)
+- rssi
+- timestamp
 
 
 Contributing
