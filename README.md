@@ -116,6 +116,8 @@ CREATE TABLE spatem (
     timestamp timestamptz DEFAULT current_timestamp,
     spatem JSONB NOT NULL
 );
+
+SELECT AddGeometryColumn ('spatem','geom',4326,'POINT',3);
 ```
 
 
