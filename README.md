@@ -74,16 +74,7 @@ Each event supports _filterParameters_.  Consult the [raddec-filter](https://git
 PostgreSQL Installation
 -----------------------
 
-[Download PostgreSQL](https://www.postgresql.org/download/) or follow the OS-specific instructions below.  __barnacles-postgres__ will automatically connect to a locally-installed PostgreSQL database which observes the default options above.
-
-### Ubuntu / Raspberry Pi OS (64-bit)
-
-```
-sudo apt install postgresql
-sudo systemctl start postgresql.service
-sudo -u postgres createuser --login --pwprompt reelyactive
-sudo -u postgres createdb -O reelyactive pareto_anywhere
-```
+Follow our [Install PostgreSQL and PostGIS](https://reelyactive.github.io/diy/postgresql-postgis-prep/) tutorial to install and prepare the database, as well as install the PostGIS extension for geospatial queries on the _spatem_ data.  __barnacles-postgres__ will automatically connect to a locally-installed PostgreSQL database which observes the default options above.
 
 
 Creating Tables
