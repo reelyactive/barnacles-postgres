@@ -162,6 +162,18 @@ Change `filename.csv` to the name/path of the source file.  The CSV file must us
 - rssi
 - timestamp
 
+To import _spatem_ data from a CSV file into a local PostgreSQL database, run the following script:
+
+    npm run import-spatem-csv filename.csv
+
+Change `filename.csv` to the name/path of the source file.  The CSV file must use the comma as a separator and the first row must specify the property names, which include the following:
+- deviceId
+- deviceIdType (optional)
+- x
+- y
+- z (optional)
+- timestamp
+
 
 Contributing
 ------------

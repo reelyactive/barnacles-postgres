@@ -1,0 +1,151 @@
+#!/usr/bin/env node
+
+const BarnaclesPostgres = require('../lib/barnaclespostgres.js');
+const fs = require('fs');
+const path = require('path');
+const Raddec = require('raddec');
+const readline = require('readline');
+
+const SEPARATOR = ',';
+const DEFAULT_CSV_FILE_PATH = 'raddec.csv'; 
+
+
+// ----- Exit gracefully if the source file isn't found -----
+let csvFilePath = (process.argv.length > 2) ? process.argv[2] :
+                                            DEFAULT_CSV_FILE_PATH; 
+try {
+  fs.accessSync(path.resolve(csvFilePath), fs.constants.R_OK);
+}
+catch(error) {
+  console.log('The source file', csvFilePath, 'could not be found.');
+  return console.log('Specify a valid source file path as an argument.');
+}
+// ----------------------------------------------------------
+
+
+let barnacles = new BarnaclesPostgres({ printErrors: true });
+let fileReader = readline.createInterface({
+  input: fs.createReadStream(path.resolve(csvFilePath))
+});
+let isReadComplete = false;
+let currentLine = 0;
+let writeCount = 0;
+let propertyIndexes = {};
+
+
+// Read the file line-by-line until close
+fileReader.on('line', processRow);
+fileReader.on('close', () => { isReadComplete = true });
+
+
+// Process a line of the file as a CSV row
+function processRow(line) {
+  if(currentLine++ === 0) {
+    let columnHeaders = line.split(',');
+    propertyIndexes = createPropertyIndexes(columnHeaders);
+    if(!propertyIndexes) {
+      return console.log('Invalid column headers:', columnHeaders);
+    }
+  }
+  else {
+    let rowData = toDataArray(line);
+    let spatem = createSpatem(propertyIndexes, rowData);
+    if(spatem) {
+      barnacles.handleEvent('spatem', spatem);
+    }
+  }
+}
+
+
+// Establish the index of each spatem property from the column headers
+function createPropertyIndexes(columnHeaders) {
+  if(!columnHeaders.includes('deviceId') ||
+     !columnHeaders.includes('x') ||
+     !columnHeaders.includes('y') ||
+     !columnHeaders.includes('timestamp')) {
+    return null;
+  }
+
+  let indexes = {};
+
+  columnHeaders.forEach((column, index) => {
+    indexes[column] = index;
+  });
+
+  return indexes;
+}
+
+
+// Split the given line based on the CSV separator,
+// handling the case where strings include the separator
+function toDataArray(line) {
+  let columns = line.split(SEPARATOR);
+
+  columns.forEach((column, index) => {
+    let isSplitString = (countOccurrences(column, '"') % 2 === 1);
+    if(isSplitString) {
+      let mergedColumn = column + SEPARATOR + columns[index + 1];
+      columns.splice(index, 2, mergedColumn);
+    }
+  });
+
+  return columns;
+}
+
+
+// Count the occurences of the given character in the given string
+function countOccurrences(string, character) {
+  return [...string].filter((item) => item === character).length;
+}
+
+
+// Create the spatem from the given columns of data
+function createSpatem(propertyIndexes, rowData) {
+  if(Object.keys(propertyIndexes).length !== rowData.length) {
+    return null;
+  }
+
+  let deviceId = rowData[propertyIndexes.deviceId];
+  let timestamp = Number.isInteger(Number(rowData[propertyIndexes.timestamp])) ?
+                        Number(rowData[propertyIndexes.timestamp]) :
+                        new Date(rowData[propertyIndexes.timestamp]).getTime();
+  let x = Number(rowData[propertyIndexes.x]);
+  let y = Number(rowData[propertyIndexes.y]);
+
+  let deviceIdType = propertyIndexes.hasOwnProperty('deviceIdType') ?
+         Number(rowData[propertyIndexes.deviceIdType].replaceAll('"', '')) :
+                                               Raddec.identifiers.TYPE_UNKNOWN;
+  let z = propertyIndexes.hasOwnProperty('z') ?
+                                        Number(rowData[propertyIndexes.z]) : 0;
+
+
+  let spatem = {
+      deviceId: deviceId,
+      deviceIdType: deviceIdType,
+      type: "location",
+      data: {
+        type: "FeatureCollection",
+        features: [{
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [ x, y, z ]
+          }
+        }]
+      },
+      timestamp: timestamp
+  };
+
+  return spatem;
+}
+
+
+barnacles.on('spatem', (spatem) => {
+  writeCount++;
+  if(isReadComplete && (writeCount === currentLine - 1)) {
+    console.log('Done.', writeCount, 'spatems written.');
+  }
+  else if(writeCount % 100 === 0) {
+    console.log(writeCount, 'spatems written');
+  }
+});

@@ -20,7 +20,8 @@
     "start": "node bin/barnacles-postgres",
     "create-tables": "node bin/barnacles-postgres-create-tables",
     "create-indexes": "node bin/barnacles-postgres-create-indexes",
-    "import-raddec-csv": "node bin/barnacles-postgres-raddec-csv"
+    "import-raddec-csv": "node bin/barnacles-postgres-raddec-csv",
+    "import-spatem-csv": "node bin/barnacles-postgres-spatem-csv"
   },
   "repository": {
     "type": "git",
