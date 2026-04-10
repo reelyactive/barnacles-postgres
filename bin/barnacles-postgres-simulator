@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+
+const BarnaclesPostgres = require('../lib/barnaclespostgres.js');
+const Raddec = require('raddec');
+
+const DEVICES = [ { deviceId: "bada55beac04", deviceIdType: 3 } ];
+const RECEIVERS = [ { receiverId: "001bc50940810000", receiverIdType: 1 } ];
+
+const RADDEC_INTERVAL_MILLISECONDS = 5000;
+
+
+let barnaclesPostgres = new BarnaclesPostgres({ printErrors: true });
+
+
+setInterval(generateSimulatedRaddec, RADDEC_INTERVAL_MILLISECONDS);
+
+
+function generateSimulatedRaddec() {
+  let device = selectRandomDevice();
+  let receiver = selectRandomReceiver();
+
+  let raddec = new Raddec({ transmitterId: device.deviceId,
+                            transmitterIdType: device.deviceIdType,
+                            timestamp: Date.now() });
+  raddec.addDecoding({ receiverId: receiver.receiverId,
+                       receiverIdType: receiver.receiverIdType,
+                       rssi: Math.round((Math.random() * 20) - 70) });
+
+  barnaclesPostgres.handleEvent('raddec', raddec);
+}
+
+function selectRandomDevice() {
+  return DEVICES[Math.floor(Math.random() * DEVICES.length)]
+}
+
+function selectRandomReceiver() {
+  return RECEIVERS[Math.floor(Math.random() * RECEIVERS.length)]
+}
+
+console.log('barnacles-postgres is writing simulated data to the database');

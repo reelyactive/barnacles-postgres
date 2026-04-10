@@ -20,6 +20,7 @@
     "start": "node bin/barnacles-postgres",
     "create-tables": "node bin/barnacles-postgres-create-tables",
     "create-indexes": "node bin/barnacles-postgres-create-indexes",
+    "simulator": "node bin/barnacles-postgres-simulator",
     "import-raddec-csv": "node bin/barnacles-postgres-raddec-csv",
     "import-spatem-csv": "node bin/barnacles-postgres-spatem-csv"
   },
@@ -29,7 +30,7 @@
   },
   "dependencies": {
     "dynamb-filter": "^1.0.1",
-    "pg": "^8.18.0",
+    "pg": "^8.20.0",
     "raddec": ">=0.6.2",
     "raddec-filter": "^1.0.1",
     "spatem-filter": "^1.0.1"
